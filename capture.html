@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CLARYA — Programme Pionnier</title>
+  <meta name="description" content="5 places disponibles. Audit gratuit + première automatisation offerte en échange d'un témoignage."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --space:       #0A0F1A;
+      --space-light: #141B2D;
+      --violet:      #7f0df2;
+      --blue:        #2e7df5;
+      --green:       #10B981;
+      --white:       #FFFFFF;
+      --muted:       rgba(255,255,255,0.5);
+      --border:      rgba(255,255,255,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--space);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-rings { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .ring {
+      position: absolute; left: 50%; top: 40%;
+      border-radius: 50%; transform: translate(-50%, -50%);
+      animation: ring-pulse 9s ease-in-out infinite;
+    }
+    .ring-1 { width: 900px; height: 900px; border: 1px solid rgba(46,125,245,0.10); animation-duration: 10s; }
+    .ring-2 { width: 620px; height: 620px; border: 1px solid rgba(127,13,242,0.12); animation-delay: -3s; animation-duration: 7.5s; }
+    .ring-3 { width: 380px; height: 380px; border: 1px solid rgba(16,185,129,0.08); animation-delay: -5.5s; animation-duration: 6s; }
+    @keyframes ring-pulse {
+      0%,100% { opacity: .5; transform: translate(-50%,-50%) scale(1); }
+      50%      { opacity: 1;  transform: translate(-50%,-50%) scale(1.025); }
+    }
+    .glow-blob {
+      position: fixed; width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(46,125,245,0.07) 0%, rgba(127,13,242,0.05) 50%, transparent 70%);
+      left: 50%; top: 30%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+    header { padding: 28px 24px; display: flex; align-items: center; justify-content: center; }
+    .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-svg { width: 36px; height: 36px; animation: logo-spin 10s linear infinite; transform-origin: center; }
+    @keyframes logo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .logo-text {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, #9B7FD4 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    main { display: flex; flex-direction: column; align-items: center; padding: 16px 24px 60px; width: 100%; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 0.78rem; font-weight: 600; color: #34D399;
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .badge-dot {
+      width: 7px; height: 7px; background: #34D399; border-radius: 50%;
+      box-shadow: 0 0 8px #34D399; animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .headline-wrap { text-align: center; max-width: 580px; margin-bottom: 40px; }
+    h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.9rem, 5vw, 2.8rem);
+      font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 14px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #2e7df5 0%, #9B7FD4 50%, #7f0df2 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+    .subtitle { color: rgba(255,255,255,0.62); font-size: 1rem; line-height: 1.65; max-width: 480px; margin: 0 auto; }
+
+    .proof-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px; }
+    .chip {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px; font-size: 0.82rem; color: rgba(255,255,255,0.7);
+    }
+
+    .form-card {
+      width: 100%; max-width: 480px;
+      background: rgba(20, 27, 45, 0.75);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 36px 32px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    .form-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 5px; letter-spacing: -0.02em; }
+    .form-subtitle { font-size: 0.84rem; color: var(--muted); margin-bottom: 26px; line-height: 1.5; }
+
+    .fields { display: flex; flex-direction: column; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.79rem; font-weight: 600; color: rgba(255,255,255,0.6); letter-spacing: 0.02em; text-transform: uppercase; }
+    label .req { color: var(--blue); margin-left: 2px; }
+
+    input, textarea {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 12px 14px;
+      font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--white);
+      outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.28); }
+    input:focus, textarea:focus {
+      border-color: rgba(46,125,245,0.5);
+      box-shadow: 0 0 0 3px rgba(46,125,245,0.12);
+      background: rgba(255,255,255,0.07);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    .divider { height: 1px; background: var(--border); margin: 22px 0; }
+
+    .btn-submit {
+      width: 100%; padding: 15px 24px; border: none; border-radius: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; color: #fff;
+      cursor: pointer; background: linear-gradient(135deg, #2e7df5 0%, #7f0df2 100%);
+      background-size: 200% auto;
+      transition: transform 0.2s, box-shadow 0.2s, background-position 0.4s;
+      box-shadow: 0 4px 24px rgba(46,125,245,0.35); letter-spacing: -0.01em;
+    }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(46,125,245,0.45); background-position: right center; }
+    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-text { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .gdpr-note { margin-top: 14px; font-size: 0.74rem; color: rgba(255,255,255,0.32); text-align: center; line-height: 1.5; }
+
+    .error-msg {
+      display: none; margin-top: 12px; padding: 12px 14px;
+      background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 10px; color: #FCA5A5; font-size: 0.83rem; text-align: center;
+    }
+
+    .success-overlay { display: none; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding: 10px 0; }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; animation: pop 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .success-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+    .success-message { color: var(--muted); font-size: 0.9rem; line-height: 1.6; max-width: 320px; }
+
+    footer { padding: 28px 24px; text-align: center; font-size: 0.77rem; color: rgba(255,255,255,0.25); margin-top: auto; }
+    footer a { color: rgba(255,255,255,0.38); text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.65); }
+
+    @media (max-width: 520px) {
+      .form-card { padding: 24px 18px; border-radius: 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-rings">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+  </div>
+  <div class="glow-blob"></div>
+
+  <div class="page">
+    <header>
+      <a href="https://clarya.fr" class="logo-wrap" target="_blank">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" stroke="url(#lg)" stroke-width="2"/>
+          <path d="M50 20 C62 20 72 28 72 40 C72 52 62 58 50 58 C38 58 28 52 28 40 C28 28 38 20 50 20Z" fill="url(#lf1)" opacity="0.9"/>
+          <path d="M50 42 C58 42 65 47 65 55 C65 63 58 68 50 68 C42 68 35 63 35 55 C35 47 42 42 50 42Z" fill="url(#lf2)" opacity="0.7"/>
+          <path d="M50 60 C55 60 60 64 60 69 C60 74 55 78 50 78 C45 78 40 74 40 69 C40 64 45 60 50 60Z" fill="url(#lf3)" opacity="0.5"/>
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="100" y2="100"><stop offset="0%" stop-color="#2e7df5"/><stop offset="100%" stop-color="#7f0df2"/></linearGradient>
+            <linearGradient id="lf1" x1="28" y1="20" x2="72" y2="58"><stop offset="0%" stop-color="#5F94E5"/><stop offset="100%" stop-color="#9992ED"/></linearGradient>
+            <linearGradient id="lf2" x1="35" y1="42" x2="65" y2="68"><stop offset="0%" stop-color="#7892E9"/><stop offset="100%" stop-color="#B09CD8"/></linearGradient>
+            <linearGradient id="lf3" x1="40" y1="60" x2="60" y2="78"><stop offset="0%" stop-color="#9992ED"/><stop offset="100%" stop-color="#7f0df2"/></linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">CLARYA</span>
+      </a>
+    </header>
+
+    <main>
+      <div class="badge"><span class="badge-dot"></span>5 places disponibles — Programme Pionnier</div>
+
+      <div class="headline-wrap">
+        <h1>Votre entreprise,<br><span class="gradient-text">enfin comme vous l'aviez imaginé.</span></h1>
+        <p class="subtitle">Audit gratuit d'1h + première automatisation offerte, en échange de votre témoignage. Zéro jargon, zéro formation.</p>
+      </div>
+
+      <div class="proof-chips">
+        <span class="chip">✓ Audit 100% gratuit</span>
+        <span class="chip">⏱ Résultat en 2–6 semaines</span>
+        <span class="chip">🔒 Aucun engagement</span>
+        <span class="chip">🇫🇷 Basé à Oloron-Sainte-Marie</span>
+      </div>
+
+      <div class="form-card">
+        <div id="form-content">
+          <div class="form-title">Rejoindre le Programme</div>
+          <div class="form-subtitle">Je vous réponds sous 24h pour un premier appel de 15 minutes.</div>
+
+          <form id="capture-form" novalidate>
+            <div class="fields">
+
+              <div class="field">
+                <label for="client">Entreprise <span class="req">*</span></label>
+                <input type="text" id="client" name="client" placeholder="Mon Entreprise SAS" required autocomplete="organization"/>
+              </div>
+
+              <div class="field">
+                <label for="decideur">Votre nom <span class="req">*</span></label>
+                <input type="text" id="decideur" name="decideur" placeholder="Jean Dupont" required autocomplete="name"/>
+              </div>
+
+              <div class="field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input type="email" id="email" name="email" placeholder="jean@monentreprise.fr" required autocomplete="email"/>
+              </div>
+
+              <div class="field">
+                <label for="message">Votre principale douleur opérationnelle</label>
+                <textarea id="message" name="message" placeholder="Ex : Je passe trop de temps à relancer mes clients manuellement, mes devis prennent des heures…"></textarea>
+              </div>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">
+              <span class="btn-text">
+                <span class="spinner" id="spinner"></span>
+                <span id="btn-label">Réserver mon audit gratuit →</span>
+              </span>
+            </button>
+
+            <div class="error-msg" id="error-msg"></div>
+          </form>
+
+          <p class="gdpr-note">Vos données sont utilisées uniquement pour vous recontacter dans le cadre du Programme Pionnier CLARYA. Aucune revente, aucun spam.</p>
+        </div>
+
+        <div class="success-overlay" id="success-overlay">
+          <div class="success-icon">✓</div>
+          <div class="success-title">C'est dans la boîte !</div>
+          <p class="success-message">Mickaël vous contactera sous 24h pour fixer un appel de 15 minutes. Gardez un œil sur votre boîte mail.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 CLARYA · <a href="https://clarya.fr" target="_blank">clarya.fr</a> · Oloron-Sainte-Marie, 64</p>
+    </footer>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJgrWA4ByGbwlLFD5pkqxDG8K1gMghrqK2dLpy4N5szGmduekIdMjhxJ-v-yyHEAOr1Q/exec";
+
+    const form     = document.getElementById('capture-form');
+    const btn      = document.getElementById('btn-submit');
+    const spinner  = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btn-label');
+    const errorMsg = document.getElementById('error-msg');
+    const successEl= document.getElementById('success-overlay');
+    const formCont = document.getElementById('form-content');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+
+      const required = form.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(f => {
+        f.style.borderColor = '';
+        if (!f.value.trim()) { f.style.borderColor = 'rgba(239,68,68,0.6)'; valid = false; }
+      });
+      if (!valid) {
+        errorMsg.textContent = 'Merci de remplir les champs obligatoires (marqués *).';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnLabel.textContent = 'Envoi en cours…';
+
+      // Colonnes du Sheet : Client | Nom du Décideur | Email | Offre | Montant | Statut | Date Relance | Message | Dossier Drive
+      const payload = {
+        client:   document.getElementById('client').value.trim(),    // col A
+        decideur: document.getElementById('decideur').value.trim(),  // col B
+        email:    document.getElementById('email').value.trim(),     // col C
+        // D Offre        → vide, à remplir manuellement
+        // E Montant      → vide, à remplir manuellement
+        // F Statut       → "Prospect" injecté par Apps Script
+        // G Date Relance → vide, à remplir manuellement
+        message:  document.getElementById('message').value.trim(),   // col H
+        // I Dossier Drive → vide, à remplir manuellement
+      };
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'no-cors',
+        });
+        formCont.style.display = 'none';
+        successEl.style.display = 'flex';
+      } catch (err) {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnLabel.textContent = 'Réserver mon audit gratuit →';
+        errorMsg.textContent = 'Connexion impossible. Réessayez ou écrivez à contact@clarya.fr';
+        errorMsg.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
