@@ -37,8 +37,12 @@
 	</script>
 
 	<style>
-		body {
+		body, html {
 			overflow-x: hidden;
+			background-color: #0A0F1A;
+		}
+
+		body {
 			scroll-behavior: smooth;
 		}
 
@@ -249,6 +253,33 @@
 		#navbar-logo:hover {
 			animation-duration: 2s;
 		}
+
+		/* ── Mobile Menu ── */
+		#mobile-menu-overlay {
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+		}
+		#mobile-menu-overlay.menu-open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		#mobile-menu-content {
+			transform: translateY(-20px);
+			opacity: 0;
+			transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+		}
+		#mobile-menu-overlay.menu-open #mobile-menu-content {
+			transform: translateY(0);
+			opacity: 1;
+		}
+		.hamburger-line {
+			transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+		}
+		.menu-open .hamburger-line-1 { transform: translateY(6px) rotate(45deg); }
+		.menu-open .hamburger-line-2 { opacity: 0; }
+		.menu-open .hamburger-line-3 { transform: translateY(-6px) rotate(-45deg); }
 
 		/* ── FAQ fixed-height cards ── */
 		details.faq-item summary::-webkit-details-marker {
@@ -2859,13 +2890,34 @@ z" />
 					class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">À
 					propos</a>
 			</div>
-			<a href="#contact"
-				class="relative group overflow-hidden rounded-full bg-white text-space px-6 md:px-8 py-2.5 font-bold text-sm transition-transform hover:scale-105 inline-block">
-				<span class="relative z-10">Laissez-moi voir</span>
-				<div
-					class="absolute inset-0 bg-gradient-to-r from-accentBlue/20 to-accentViolet/20 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
-				</div>
-			</a>
+			<div class="flex items-center gap-3">
+				<a href="#contact"
+					class="hidden sm:inline-block relative group overflow-hidden rounded-full bg-white text-space px-6 md:px-8 py-2.5 font-bold text-sm transition-transform hover:scale-105">
+					<span class="relative z-10">Laissez-moi voir</span>
+					<div
+						class="absolute inset-0 bg-gradient-to-r from-accentBlue/20 to-accentViolet/20 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
+					</div>
+				</a>
+				<!-- Mobile Menu Button -->
+				<button id="mobile-menu-btn" class="md:hidden flex flex-col justify-center items-center w-11 h-11 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 z-[100] gap-1.5 transition-colors cursor-pointer" aria-label="Menu">
+					<span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-1 pointer-events-none"></span>
+					<span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-2 pointer-events-none"></span>
+					<span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-3 pointer-events-none"></span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Mobile Menu Overlay -->
+		<div id="mobile-menu-overlay" class="fixed inset-0 bg-space/95 backdrop-blur-xl z-[90] flex items-center justify-center md:hidden">
+			<div id="mobile-menu-content" class="flex flex-col items-center gap-6 w-full px-6 text-center">
+				<a href="#chaos" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Le Problème</a>
+				<a href="#beta" class="nav-link-mobile text-2xl font-bold transition-colors p-2"><span class="animate-shimmer">L'Horizon</span></a>
+				<a href="#experience" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Solutions</a>
+				<a href="#pourquoi-nous" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Pourquoi CLARYA</a>
+				<a href="#faq" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">FAQ</a>
+				<a href="apropos.html" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors mt-2 p-2">À propos</a>
+				<a href="#contact" class="nav-link-mobile w-full max-w-[280px] mt-6 py-4 bg-gradient-to-r from-accentViolet to-accentBlue rounded-full text-white font-bold text-lg inline-flex items-center justify-center">Laissez-moi voir</a>
+			</div>
 		</div>
 	</nav>
 
@@ -2873,7 +2925,7 @@ z" />
 
 		<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
 		<section
-			class="relative min-h-[100svh] flex flex-col items-center justify-center px-6 pt-20 md:pt-32 pb-16 md:pb-20 text-center overflow-hidden">
+			class="relative min-h-screen min-h-[100svh] flex flex-col items-center justify-center px-6 pt-20 md:pt-32 pb-16 md:pb-20 text-center overflow-hidden">
 
 			<!-- ── Fond spatial ── -->
 			<div class="absolute inset-0 bg-mesh pointer-events-none opacity-50"></div>
@@ -2907,12 +2959,10 @@ z" />
 
 				<!-- Sous-titre -->
 				<p class="reveal item text-base md:text-2xl text-slate-400 max-w-2xl leading-relaxed mb-4 font-light">
-					Vous avez créé votre entreprise pour faire ce que vous aimez.<br class="hidden sm:block" />Pas pour
-					relancer des devis, ressaisir des données, ou répondre aux mêmes emails.
+					Vous avez créé votre entreprise pour faire ce que vous aimez.<br class="hidden sm:block" />Pas pour relancer des devis, ressaisir des données ou trier des emails.
 				</p>
 				<p class="reveal item text-base md:text-lg text-slate-500 max-xl mb-10 font-light">
-					<span class="animate-shimmer font-semibold" style="font-size:inherit">CLARYA</span> s'en occupe.
-					Vous, vous revenez à l'essentiel.
+					<span class="animate-shimmer font-semibold" style="font-size:inherit">CLARYA</span> s'en occupe. Vous, vous respirez à nouveau.
 				</p>
 
 				<!-- Rareté -->
@@ -2959,7 +3009,7 @@ z" />
 						<span class="text-sm font-medium text-red-300">Vous vous reconnaissez ?</span>
 					</div>
 					<h2 class="font-display font-bold text-4xl md:text-6xl text-white mb-6">
-						Voici à quoi ressemble<br />
+						Voici à quoi ressemble<br class="hidden sm:block" />
 						<span class="bg-gradient-to-r from-red-400 to-accentViolet bg-clip-text text-transparent">votre
 							journée. Vraiment.</span>
 					</h2>
@@ -2971,7 +3021,7 @@ z" />
 				<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 stagger-children">
 
 					<!-- Carte principale : journée type animée -->
-					<div class="item lg:col-span-7 glass-card rounded-3xl p-5 md:p-8 relative overflow-hidden">
+					<div class="item lg:col-span-7 glass-card rounded-3xl p-4 sm:p-5 md:p-8 relative overflow-hidden">
 						<div
 							class="absolute top-0 right-0 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none">
 						</div>
@@ -3104,7 +3154,7 @@ z" />
 
 						<!-- Card 1 -->
 						<div
-							class="symptom-card flex-1 glass-card rounded-2xl p-4 md:p-6 group relative overflow-hidden border border-transparent hover:border-red-500/25">
+							class="symptom-card flex-1 glass-card rounded-2xl p-4 sm:p-5 md:p-6 group relative overflow-hidden border border-transparent hover:border-red-500/25">
 							<div
 								class="absolute inset-0 bg-gradient-to-br from-red-500/0 group-hover:from-red-500/5 to-transparent transition-all duration-500">
 							</div>
@@ -3133,7 +3183,7 @@ z" />
 
 						<!-- Card 2 -->
 						<div
-							class="symptom-card flex-1 glass-card rounded-2xl p-4 md:p-6 group relative overflow-hidden border border-transparent hover:border-orange-500/25">
+							class="symptom-card flex-1 glass-card rounded-2xl p-4 sm:p-5 md:p-6 group relative overflow-hidden border border-transparent hover:border-orange-500/25">
 							<div
 								class="absolute inset-0 bg-gradient-to-br from-orange-500/0 group-hover:from-orange-500/5 to-transparent transition-all duration-500">
 							</div>
@@ -3164,7 +3214,7 @@ z" />
 
 						<!-- Card 3 -->
 						<div
-							class="symptom-card flex-1 glass-card rounded-2xl p-4 md:p-6 group relative overflow-hidden border border-transparent hover:border-accentViolet/25">
+							class="symptom-card flex-1 glass-card rounded-2xl p-4 sm:p-5 md:p-6 group relative overflow-hidden border border-transparent hover:border-accentViolet/25">
 							<div
 								class="absolute inset-0 bg-gradient-to-br from-accentViolet/0 group-hover:from-accentViolet/5 to-transparent transition-all duration-500">
 							</div>
@@ -3281,7 +3331,7 @@ z" />
 					<!-- Titre -->
 					<h2
 						class="font-display font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-10 leading-[1.06] tracking-tight">
-						Soyez l'un<br />
+						Soyez l'un<br class="hidden sm:block" />
 						<span class="animate-shimmer">d'entre eux</span>.
 					</h2>
 
@@ -3530,7 +3580,7 @@ z" />
 					</span>
 					<h2
 						class="font-display font-bold text-4xl md:text-6xl text-white leading-[1.06] tracking-tight max-w-3xl">
-						CLARYA trace la route.<br />
+						CLARYA trace la route.<br class="hidden sm:block" />
 						<span class="animate-shimmer">Vous choisissez la destination.</span>
 					</h2>
 					<p class="mt-6 text-xl text-slate-400 font-light max-w-xl">
@@ -3589,14 +3639,11 @@ z" />
 								<span class="material-symbols-outlined text-white text-2xl">auto_fix_high</span>
 							</div>
 							<div>
-								<p class="text-slate-600 text-sm font-medium uppercase tracking-widest mb-2">Le résultat
-									visible</p>
+								<p class="text-slate-600 text-sm font-medium uppercase tracking-widest mb-2">Le résultat visible</p>
 								<div
 									class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accentViolet/10 border border-accentViolet/20">
-									<span
-										class="material-symbols-outlined text-accentViolet text-base">trending_up</span>
-									<span class="text-white font-semibold text-sm">5 à 10h/semaine libérées dès les
-										premières semaines.</span>
+									<span class="material-symbols-outlined text-accentViolet text-base">trending_up</span>
+									<span class="text-white font-semibold text-sm">5 à 10h/semaine libérées dès les premières semaines.</span>
 								</div>
 							</div>
 						</div>
@@ -3605,20 +3652,12 @@ z" />
 							<div
 								class="absolute top-0 right-0 text-[120px] font-black text-white/[0.03] font-display leading-none select-none pointer-events-none">
 								02</div>
-							<span
-								class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/60 mb-4">STRUCTURER</span>
-							<h3 class="font-display font-bold text-2xl text-white mb-4">On construit. Sans vous gêner.
-							</h3>
-							<p class="text-slate-400 leading-relaxed mb-6">Relances, devis, RDV, rapports — on
-								automatise ce qui vous prend du temps. Sans interrompre votre équipe, sans formation
-								préalable. On livre, on teste, on ajuste.</p>
+							<span class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/60 mb-4">AUTOMATIONS</span>
+							<h3 class="font-display font-bold text-2xl text-white mb-4">On construit. Sans vous gêner.</h3>
+							<p class="text-slate-400 leading-relaxed mb-6">Relances, devis, RDV, rapports. On automatise ce qui vous prend du temps sans interrompre votre équipe ni exiger de formation. On livre. On teste. On ajuste.</p>
 							<div class="flex flex-wrap gap-2">
-								<span
-									class="text-xs font-semibold px-3 py-1.5 rounded-full bg-accentViolet/10 border border-accentViolet/15 text-accentViolet">Semaines
-									2–6</span>
-								<span
-									class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-slate-400">Zéro
-									interruption</span>
+								<span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-accentViolet/10 border border-accentViolet/15 text-accentViolet">Setup : 800–2 500€</span>
+								<span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-slate-400">Zéro interruption</span>
 							</div>
 						</div>
 					</div>
@@ -3630,10 +3669,7 @@ z" />
 							<div
 								class="absolute top-0 right-0 text-[120px] font-black text-white/[0.03] font-display leading-none select-none pointer-events-none">
 								03</div>
-							<span
-								class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-accentBlue/60 mb-4">ATTIRER
-								<span class="text-white/20 font-normal normal-case tracking-normal text-[9px]">— en
-									option</span></span>
+							<span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-accentBlue/60 mb-4">SITE WEB <span class="text-white/20 font-normal normal-case tracking-normal text-[9px]">— inclus</span></span>
 							<h3 class="font-display font-bold text-2xl text-white mb-4">Un site qui travaille avec vous,
 								pas à part.</h3>
 							<p class="text-slate-400 leading-relaxed mb-6">Pas un site vitrine de plus. Un site branché
@@ -3672,8 +3708,7 @@ z" />
 
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative z-10">
 								<div>
-									<span
-										class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/70 mb-4">AUGMENTER</span>
+									<span class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/70 mb-4">ACCOMPAGNEMENT</span>
 									<h3 class="font-display font-bold text-3xl text-white mb-5 leading-tight">Votre
 										horizon avance. CLARYA avance avec vous.</h3>
 									<p class="text-slate-400 leading-relaxed mb-6">
@@ -3744,6 +3779,29 @@ z" />
 						</div>
 					</div>
 
+					<!-- Étape 5 -->
+					<div class="reveal group grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-8">
+						<div class="flex items-center gap-6 px-4 md:px-8">
+							<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-accentBlue to-accentGreen flex items-center justify-center shadow-lg shadow-accentBlue/20 flex-shrink-0">
+								<span class="material-symbols-outlined text-white text-2xl">developer_board</span>
+							</div>
+							<div>
+								<p class="text-slate-600 text-sm font-medium uppercase tracking-widest mb-2">Le palier ultime</p>
+								<p class="text-white font-semibold">Dashboard custom, CRM dédié, plateforme métier.</p>
+							</div>
+						</div>
+						<div class="bg-spaceLight rounded-4xl p-10 border border-white/5 group-hover:border-accentBlue/20 transition-all duration-300 relative overflow-hidden">
+							<div class="absolute top-0 right-0 text-[120px] font-black text-white/[0.03] font-display leading-none select-none pointer-events-none">05</div>
+							<span class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentBlue/60 mb-4">SAAS PERSONNALISÉ</span>
+							<h3 class="font-display font-bold text-2xl text-white mb-4">Un logiciel à votre nom.</h3>
+							<p class="text-slate-400 leading-relaxed mb-6">Quand les outils standards ne suffisent plus. On crée votre propre logiciel interne. 100% sur-mesure pour vos processus les plus complexes.</p>
+							<div class="flex flex-wrap gap-2">
+								<span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-accentBlue/10 border border-accentBlue/15 text-accentBlue">Sur devis</span>
+								<span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-slate-400">Architecture complète</span>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</section>
@@ -3759,7 +3817,7 @@ z" />
 						class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/60 mb-6">Pourquoi
 						CLARYA</span>
 					<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-6 leading-tight">
-						Il y a des dizaines d'agences.<br />
+						Il y a des dizaines d'agences.<br class="hidden sm:block" />
 						<span class="animate-shimmer">Aucune qui vous ressemble.</span>
 					</h2>
 					<p class="text-xl text-slate-400 font-light">Ce n'est pas une question de technologie. C'est une
@@ -3795,7 +3853,7 @@ z" />
 							class="w-12 h-12 rounded-full bg-space text-white flex items-center justify-center mb-8 relative z-10">
 							<span class="material-symbols-outlined text-xl">location_on</span>
 						</div>
-						<h3 class="font-display font-bold text-2xl mb-3 relative z-10">Basé à Oloron.<br />Accessible
+						<h3 class="font-display font-bold text-2xl mb-3 relative z-10">Basé à Oloron.<br class="hidden sm:block" />Accessible
 							partout.</h3>
 						<p class="text-slate-600 relative z-10">On connaît les TPE et PME françaises de l'intérieur. Et
 							si besoin, on se déplace.</p>
@@ -3809,7 +3867,7 @@ z" />
 							<span class="material-symbols-outlined text-accentBlue text-xl">architecture</span>
 						</div>
 						<h3 class="font-display font-bold text-xl text-white mb-3"><span class="animate-shimmer">Fait
-								pour vous.</span><br />Pas pour le client d'avant.</h3>
+								pour vous.</span><br class="hidden sm:block" />Pas pour le client d'avant.</h3>
 						<p class="text-slate-400 text-sm leading-relaxed">Aucune solution copiée-collée. On part de
 							votre façon de travailler, pas d'un template préfabriqué.</p>
 					</div>
@@ -3834,7 +3892,7 @@ z" />
 							class="w-12 h-12 rounded-2xl bg-accentViolet/10 border border-accentViolet/20 flex items-center justify-center mb-8">
 							<span class="material-symbols-outlined text-accentViolet text-xl">person</span>
 						</div>
-						<h3 class="font-display font-bold text-xl text-white mb-3">Vous parlez à Mickaël.<br />Pas à un
+						<h3 class="font-display font-bold text-xl text-white mb-3">Vous parlez à Mickaël.<br class="hidden sm:block" />Pas à un
 							assistant.</h3>
 						<p class="text-slate-400 text-sm leading-relaxed">Pas de ticket, pas de bot, pas de délégation.
 							Chaque échange passe par la même personne qui a construit votre solution.</p>
@@ -3861,29 +3919,15 @@ z" />
 
 					<!-- Gauche — texte -->
 					<div class="reveal">
-						<span
-							class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/60 mb-6">Mickaël
-							— Fondateur CLARYA</span>
+						<span class="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-accentViolet/60 mb-6">Mickaël — Fondateur CLARYA</span>
 						<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-8 leading-tight">
-							Je ne vends pas<br />de la technologie.<br />
-							<span class="animate-shimmer">Je vends du temps.</span>
+							Je ne vends pas<br class="hidden sm:block" />de la technologie.<br class="hidden sm:block" />
+							<span class="animate-shimmer">Je vends du Soulagement.</span>
 						</h2>
 						<div class="space-y-5 text-slate-400 leading-relaxed">
-							<p>
-								J'ai passé des années à comprendre comment les petites structures fonctionnent — leurs
-								vraies contraintes, leurs vraies peurs, et le fossé entre ce qu'elles veulent faire et
-								ce qu'elles ont le temps de faire.
-							</p>
-							<p>
-								CLARYA, c'est la réponse concrète à ce fossé. Pas un outil de plus. Une présence — qui
-								s'adapte à vous, apprend comment vous travaillez, et libère du temps pour ce que vous
-								faites vraiment bien.
-							</p>
-							<p class="text-slate-300">
-								Je suis basé à Oloron-Sainte-Marie, dans les Pyrénées-Atlantiques. Je réponds à chaque
-								message moi-même. Et quand je livre quelque chose, je m'assure que vous comprenez
-								exactement ce que vous avez entre les mains.
-							</p>
+							<p>J'ai passé des années à comprendre comment les petites structures fonctionnent — leurs vraies contraintes, et le fossé entre ce qu'elles veulent faire et le temps dont elles disposent.</p>
+							<p>CLARYA est la réponse. Pas un outil. Une présence. Elle s'adapte, absorbe votre chaos opérationnel, et libère cet espace mental dont vous avez tant besoin.</p>
+							<p class="text-slate-300">Basé à Oloron-Sainte-Marie. Je réponds moi-même. Et quand je livre, la machine tourne en silence.</p>
 						</div>
 						<div class="mt-10 flex flex-col sm:flex-row gap-4">
 							<a href="#contact"
@@ -4131,13 +4175,13 @@ z" />
 			<div class="max-w-4xl mx-auto">
 				<div class="text-center mb-16 reveal">
 					<h2 class="font-display font-bold text-5xl md:text-7xl text-white leading-tight mb-6">
-						Vous aviez dit :<br />
+						Vous aviez dit :<br class="hidden sm:block" />
 						<span
 							class="text-transparent bg-clip-text bg-gradient-to-r from-accentBlue via-accentViolet to-white animate-gradient">un
-							jour.</span><br />
+							jour.</span><br class="hidden sm:block" />
 						Je dis : maintenant.
 					</h2>
-					<p class="text-xl text-slate-400 mb-10">L'audit découverte est gratuit et sans engagement.<br />1
+					<p class="text-xl text-slate-400 mb-10">L'audit découverte est gratuit et sans engagement.<br class="hidden sm:block" />1
 						heure. Pas
 						de présentation de vente. On regarde votre entreprise ensemble.</p>
 					<div class="inline-flex flex-wrap gap-4 justify-center mb-10"><a href="#contact-form"
@@ -7154,6 +7198,30 @@ z" />
 					// ── Fix display body ──────────────────────────────────────────────
 					document.querySelectorAll('#faq .faq-body').forEach(b => { b.style.display = 'block'; });
 
+				})();
+				
+				// ── Mobile Menu Toggle ───────────────────────────────────────────────
+				(function() {
+					const btn = document.getElementById('mobile-menu-btn');
+					const overlay = document.getElementById('mobile-menu-overlay');
+					const links = document.querySelectorAll('.nav-link-mobile');
+					
+					if(!btn || !overlay) return;
+
+					function toggleMenu() {
+						overlay.classList.toggle('menu-open');
+						btn.classList.toggle('menu-open');
+						if(overlay.classList.contains('menu-open')) {
+							document.body.style.overflow = 'hidden';
+						} else {
+							document.body.style.overflow = '';
+						}
+					}
+					
+					btn.addEventListener('click', toggleMenu);
+					links.forEach(l => l.addEventListener('click', () => {
+						if(overlay.classList.contains('menu-open')) toggleMenu();
+					}));
 				})();
 				// ─────────────────────────────────────────────────────────────────────
 

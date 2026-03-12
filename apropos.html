@@ -49,10 +49,40 @@
   </script>
 
   <style>
-    body {
+    html, body {
       overflow-x: hidden;
       scroll-behavior: smooth;
     }
+
+    /* ── Mobile Menu ── */
+    body.menu-open {
+      overflow: hidden;
+    }
+    #mobile-menu-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #mobile-menu-overlay.menu-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #mobile-menu-content {
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    #mobile-menu-overlay.menu-open #mobile-menu-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .hamburger-line {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+    .menu-open .hamburger-line-1 { transform: translateY(6px) rotate(45deg); }
+    .menu-open .hamburger-line-2 { opacity: 0; }
+    .menu-open .hamburger-line-3 { transform: translateY(-6px) rotate(-45deg); }
 
     .glass-panel {
       backdrop-filter: blur(24px);
@@ -1200,13 +1230,35 @@
           class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">FAQ</a>
         <a href="apropos.html" class="nav-link active text-sm font-medium text-white transition-colors relative">À propos</a>
       </div>
-      <a href="#" onclick="openCaptureModal();return false;"
-        class="relative group overflow-hidden rounded-full bg-white text-space px-6 md:px-8 py-2.5 font-bold text-sm transition-transform hover:scale-105 inline-block">
-        <span class="relative z-10">Laissez-moi voir</span>
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-accentBlue/20 to-accentViolet/20 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
-        </div>
-      </a>
+      <div class="flex items-center gap-3">
+        <a href="#" onclick="openCaptureModal();return false;"
+          class="hidden sm:inline-block relative group overflow-hidden rounded-full bg-white text-space px-6 md:px-8 py-2.5 font-bold text-sm transition-transform hover:scale-105">
+          <span class="relative z-10">Laissez-moi voir</span>
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-accentBlue/20 to-accentViolet/20 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
+          </div>
+        </a>
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden flex flex-col justify-center items-center w-11 h-11 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 z-[100] gap-1.5 transition-colors cursor-pointer" aria-label="Menu">
+          <span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-1 pointer-events-none"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-2 pointer-events-none"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full hamburger-line hamburger-line-3 pointer-events-none"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-space/95 backdrop-blur-xl z-[90] flex items-center justify-center md:hidden">
+      <div id="mobile-menu-content" class="flex flex-col items-center gap-6 w-full px-6 text-center">
+        <a href="index.html#chaos" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Le Problème</a>
+        <a href="index.html#beta" class="nav-link-mobile text-2xl font-bold transition-colors p-2"><span class="animate-shimmer">L'Horizon</span></a>
+        <a href="index.html#experience" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Solutions</a>
+        <a href="index.html#pourquoi-nous" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Pourquoi CLARYA</a>
+        <a href="index.html#bio" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">Notre ADN</a>
+        <a href="index.html#faq" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors p-2">FAQ</a>
+        <a href="apropos.html" class="nav-link-mobile text-2xl font-bold text-slate-300 hover:text-white transition-colors mt-2 p-2">À propos</a>
+        <a href="#" onclick="openCaptureModal();return false;" class="nav-link-mobile w-full max-w-[280px] mt-6 py-4 bg-gradient-to-r from-accentViolet to-accentBlue rounded-full text-white font-bold text-lg inline-flex items-center justify-center">Laissez-moi voir</a>
+      </div>
     </div>
   </nav>
 
@@ -1225,7 +1277,7 @@
         </div>
         <div class="flex-1 text-center md:text-left">
           <h1 class="font-display font-bold text-5xl md:text-7xl tracking-tight text-white mb-6">
-            L'histoire derrière <br />
+            L'histoire derrière <br class="hidden sm:block" />
             <span class="animate-shimmer">CLARYA</span>
           </h1>
           <p class="text-xl text-slate-400 font-light mb-8">De l'insatisfaction face au chaos, à la création d'une
@@ -1873,6 +1925,31 @@
 
 
   <script>
+    // ── Mobile Menu Toggle ───────────────────────────────────────────────
+    (function() {
+      const btn = document.getElementById('mobile-menu-btn');
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const links = document.querySelectorAll('.nav-link-mobile');
+      
+      if(!btn || !overlay) return;
+
+      function toggleMenu() {
+        overlay.classList.toggle('menu-open');
+        btn.classList.toggle('menu-open');
+        if(overlay.classList.contains('menu-open')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      }
+      
+      btn.addEventListener('click', toggleMenu);
+      links.forEach(l => l.addEventListener('click', () => {
+        if(overlay.classList.contains('menu-open')) toggleMenu();
+      }));
+    })();
+    // ─────────────────────────────────────────────────────────────────────
+
     // ── Modal CLARYA (Programme Pionnier) ──
     const CLARYA_GAS_URL = "https://script.google.com/macros/s/AKfycbzJgrWA4ByGbwlLFD5pkqxDG8K1gMghrqK2dLpy4N5szGmduekIdMjhxJ-v-yyHEAOr1Q/exec";
 
