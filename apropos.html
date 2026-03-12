@@ -4,15 +4,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Découvrez Mickaël et l'histoire de CLARYA — une agence d'automatisation IA née à Oloron-Sainte-Marie, pour transformer le quotidien des TPE et PME françaises." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/clarya-icon.svg" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://clarya.fr/apropos.html" />
+  <meta property="og:title" content="À propos — CLARYA, automatisation IA pour PME" />
+  <meta property="og:description" content="Mickaël, fondateur de CLARYA, traduit l'IA en résultats concrets pour les TPE et PME. Sans jargon, sans formation. Basé à Oloron-Sainte-Marie." />
+  <meta name="twitter:card" content="summary_large_image" />
   <title>CLARYA — À propos & Parcours</title>
   <meta name="description"
     content="L'histoire de CLARYA, le parcours de Mickaël, et l'offre d'accompagnement complète pour automatiser votre entreprise." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600&display=swap" />
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@300..700,0..1&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0&display=swap"
     rel="stylesheet" />
 
   <script>
@@ -93,7 +105,8 @@
       color: #ffffff !important;
     }
 
-    .nav-link.active::after {
+    .nav-link.active::after,
+    .nav-link:hover::after {
       transform: translateX(-50%) scaleX(1);
       opacity: 1;
     }
@@ -1182,12 +1195,12 @@
         <a href="index.html#pourquoi-nous"
           class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">Pourquoi CLARYA</a>
         <a href="index.html#bio"
-          class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">Mickaël</a>
+          class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">Notre ADN</a>
         <a href="index.html#faq"
           class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors relative">FAQ</a>
         <a href="apropos.html" class="nav-link active text-sm font-medium text-white transition-colors relative">À propos</a>
       </div>
-      <a href="index.html#contact"
+      <a href="#" onclick="openCaptureModal();return false;"
         class="relative group overflow-hidden rounded-full bg-white text-space px-6 md:px-8 py-2.5 font-bold text-sm transition-transform hover:scale-105 inline-block">
         <span class="relative z-10">Laissez-moi voir</span>
         <div
@@ -1600,8 +1613,7 @@
         </a>
       </div>
       <div class="w-full flex flex-col md:flex-row justify-center items-center gap-8 border-b border-white/5 pb-10">
-        <a href="index.html#contact"
-          class="bg-white text-space px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition-colors inline-block">Discutons</a>
+        <a href="#" onclick="openCaptureModal();return false;" class="bg-white text-space px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition-colors inline-block">Discutons</a>
       </div>
       <div class="w-full mt-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
         <p>© 2026 CLARYA. Tous droits réservés.</p>
@@ -1814,21 +1826,9 @@
       })();
 
       // ── Throttled scroll (scroll-to-top) ──
-      // ── Hover nav-links → indicateur ──
-      const navLinks = document.querySelectorAll('.nav-link');
+      // ── Hover CSS gère désormais l'indicateur ─────────────────────────────
       const navbar    = document.getElementById("navbar");
       const navInner  = navbar?.querySelector("div");
-      navLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-          navLinks.forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
-        });
-        link.addEventListener('mouseleave', () => {
-          // Remettre "À propos" actif par défaut sur cette page
-          navLinks.forEach(l => l.classList.remove('active'));
-          document.querySelector('.nav-link[href="apropos.html"]')?.classList.add('active');
-        });
-      });
 
       const btn = document.getElementById("scroll-top");
       let ticking = false;
@@ -1869,6 +1869,18 @@
         ecoObs.observe(ecoDiagram);
       }
     });
+  </script>
+
+
+  <script>
+    // ── Modal CLARYA (Programme Pionnier) ──
+    const CLARYA_GAS_URL = "https://script.google.com/macros/s/AKfycbzJgrWA4ByGbwlLFD5pkqxDG8K1gMghrqK2dLpy4N5szGmduekIdMjhxJ-v-yyHEAOr1Q/exec";
+
+    function openCaptureModal() {
+      // Redirect to capture.html (standalone page) or open modal if present
+      window.location.href = "capture.html";
+    }
+    function closeCaptureModal() {}
   </script>
 
 </body>
